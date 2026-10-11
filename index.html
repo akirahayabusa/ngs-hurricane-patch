@@ -94,6 +94,10 @@ thead th{font-family:var(--f-display);font-size:16px}
 thead th.new{color:var(--ed-new)} thead th.origin{color:var(--ed-origin)}
 tbody th{color:var(--ash);font-weight:500;width:22%;white-space:nowrap}
 .cmp .foot{margin:14px 0 0;font-size:13px;color:var(--ash)}
+.pc{background:var(--ink-2);border:1px solid var(--ink-3);border-left:3px solid var(--steel);padding:18px 20px}
+.pc .intro{margin:0 0 12px;color:#d8d2c7;max-width:80ch}
+.pc ul{margin:0 0 12px;padding-left:1.2em;color:#d8d2c7;font-size:14px;line-height:1.7}
+.pc p.sm{margin:8px 0 0;font-size:13px;color:var(--ash);max-width:85ch;line-height:1.65}
 
 /* ---------- feature matrix ---------- */
 .feat{background:var(--ink-2);border:1px solid var(--ink-3);padding:6px 0 4px}
@@ -213,6 +217,15 @@ footer b,.qq{color:var(--bone)}
       <button class="btn" type="button" id="dlCopy" data-i="dlCopy"></button>
       <span class="msg" id="dlMsg"></span>
     </div>
+    <div class="dl">
+      <a class="go" id="pcLink" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>
+        <span><span id="pcName"></span><small data-i="pcSub"></small></span>
+      </a>
+      <span class="code"><span data-i="dlCode"></span><b>4v6q</b></span>
+      <button class="btn" type="button" id="pcCopy" data-i="dlCopy"></button>
+      <span class="msg" id="pcMsg"></span>
+    </div>
     <div class="slash"></div>
   </div>
 </header>
@@ -222,6 +235,11 @@ footer b,.qq{color:var(--bone)}
     <h2 class="h2" data-i="edTitle"></h2>
     <div class="eds" id="eds"></div>
     <p class="langnote" data-i="langNote"></p>
+  </section>
+
+  <section class="wrap">
+    <h2 class="h2" data-i="pcTitle"></h2>
+    <div class="pc" id="pc"></div>
   </section>
 
   <section class="wrap">
@@ -264,17 +282,47 @@ footer b,.qq{color:var(--bone)}
 <script>
 /* NINJA GAIDEN Σ (PS3, BLUS30036) changelog. Every statement comes from the project's release records
    (docs/RELEASE_*.md), the usage notes (docs/发版说明/) and docs/14; unverified points are marked as such.
-   lines: A = 中文版 · B = 中文飓风版 new (黑之章交差) · B2 = 中文飓风版 origin (一代交差). Σ has no Japanese build. */
+   lines: A = 中文版 · B = 中文飓风版 new (黑之章交差) · B2 = 中文飓风版 origin (一代交差). Σ has no Japanese build.
+   The PC (Steam) patch has its own section (const PC), outside the PS3 timeline. */
 const ORDER = ["A","B","B2"];
 const LINE = {A:{ed:"base",lang:"zh"},B:{ed:"new",lang:"zh"},B2:{ed:"origin",lang:"zh"}};
 const LATEST = {A:"1.0.5",B:"1.0.5-new",B2:"1.0.5-origin"};
 const DL_URL = "https://pan.baidu.com/s/1PzzYisC9snaW5yAslmFOCA?pwd=pk93", DL_CODE = "pk93";
 const ALL="A B B2", HUR="B B2";
+/* PC (Steam Master Collection) Hurricane patch: separate project E:\games\emu\ninja gaiden sigma pc local;
+   sources: its docs/RELEASE_PC飓风版1.0.5.md, docs/发版说明/使用说明_PC.txt, docs/03–05. */
+const PC_URL = "https://pan.baidu.com/s/1eQUdjsRAtebZxzOdyPJUzg?pwd=4v6q", PC_CODE = "4v6q";
+const PC = {
+ zh:{ intro:"把 PS3 中文飓风版 1.0.5 的玩法复原移植到 Steam《NINJA GAIDEN: Master Collection》的 NINJA GAIDEN Σ。以补丁形式发布，需要先装好 jinjia &amp; Adrian 的简体中文汉化，本补丁不改动汉化内容。2026-10-11 首次发布：PC 飓风版 1.0.5。",
+  items:["<b>秘传「交差之法」</b>：精防即交差，规则与 PS3 飓风版 1.0.5 相同（游戏算作挡住的攻击、命中前 1–13 帧按防御、任何状态、交差中可连续交差、未精防的攻击打不到；投技与导弹类破防攻击不能交差）；跟随游戏里“防御”的按键设置；所有武器都能交差，包括双刀。",
+   "交差后接 Y 瞬间蓄力；专属火花和脚下气浪；+1000 业（所有难度），像绝技一样弹出“Intercept 1000”。",
+   "交差之法与宁静腕轮开局自带（隼龙；瑞秋不给）；妖刀鬼彻装备期间持续扣血（7 个道具表全部）。",
+   "标题画面底部加上“Hurricane By 哈雅布撒”和版本号（飓风origin版1.0.5 / 飓风new版1.0.5），字体与汉化组署名相同，汉化署名保持原样。",
+   "两个补丁包：一代交差（origin，飓风包原版交差招式）、黑之章交差（new，黑之章短版招式），只差交差招式；不能同时安装，换版本先还原。"],
+  install:"安装：退出游戏，双击“安装补丁.bat”。程序会自动找到 Steam 里的游戏目录，核对 exe 与 databin 的 SHA-1 后写入；只改两个文件里的部分字节，文件大小不变，不改存档；双击“还原.bat”恢复原样。要求 Steam 版 buildid 9249168 + 上述汉化（exe SHA-1 9ba11b5d86a5d86833c8f6bcfb16b97a052dfb0e，databin SHA-1 187eaadc6e6019c8b241b02d236795f874384ac6）。在 Steam 里验证文件完整性或游戏更新后需要重新安装。",
+  test:"测试情况：一代交差（origin）在作者的 Steam 版上实测——交差、特效、弹分、接 Y 瞬间蓄力、自动补道具、鬼彻扣血、标题署名，以及补丁程序的安装、还原、换版本保护。黑之章交差（new）、双刀交差、任务与生存模式、改键后交差没有在 PC 上单独实测。已知限制同 PS3 飓风版：黑之章交差的白光、彩虹圆环、残影未恢复；交差和绝技同时弹分时只显示绝技。" },
+ en:{ intro:"The restored gameplay of PS3 Hurricane 1.0.5, ported to NINJA GAIDEN Σ in the Steam NINJA GAIDEN: Master Collection. Released as a patch; it needs the Simplified Chinese translation by jinjia &amp; Adrian installed first and leaves that translation untouched. First release 2026-10-11: PC Hurricane 1.0.5.",
+  items:["<b>Intercept</b>: perfect block = Intercept, same rule as PS3 Hurricane 1.0.5 (attacks the game counts as blocked, Guard pressed 1–13 frames before the hit, any state, chained Intercepts, other hits miss during the move; throws and guard-breaking attacks such as missiles cannot be intercepted); follows the in-game Guard button setting; every weapon including the Dual Katana.",
+   "Instant charge with Y after an Intercept; its own sparks and a burst at Ryu's feet; +1000 karma on every difficulty with an “Intercept 1000” pop-up like Ultimate Techniques.",
+   "Intercept and the Armlet of Tranquility from the start (Ryu; not Rachel); the Kitetsu drains health while equipped (all 7 item tables).",
+   "“Hurricane By 哈雅布撒” and the version (飓风origin版1.0.5 / 飓风new版1.0.5) added at the bottom of the title screen in the translators' credit font; their credit is unchanged.",
+   "Two packages: 2004 Intercept (origin, the Hurricane Pack move) and Black's Intercept (new, Black's short move); they differ only in the move, cannot be installed together, and switching means restoring first."],
+  install:"Install: quit the game and run “安装补丁.bat”. It finds the Steam game folder, checks the SHA-1 of the exe and databin, then writes the patch; only some bytes of those two files change (sizes unchanged, saves untouched). “还原.bat” restores them. Requires Steam buildid 9249168 + the translation above (exe SHA-1 9ba11b5d86a5d86833c8f6bcfb16b97a052dfb0e, databin SHA-1 187eaadc6e6019c8b241b02d236795f874384ac6). Reinstall after Steam's file verification or a game update.",
+  test:"Testing: the origin package was tested on the author's Steam copy — Intercept, effects, pop-up, Y instant charge, items given at start, Kitetsu drain, title credit, and the patcher's install, restore and wrong-version guard. The new package, Dual Katana Intercept, missions, survival and remapped buttons have not been tested on PC. Known limits as on PS3: Black's white flash, rainbow ring and afterimages are not restored; simultaneous Intercept and Ultimate Technique pop-ups show only the latter." },
+ ja:{ intro:"PS3 版 中文飓风版 1.0.5 の機能復元を、Steam『NINJA GAIDEN: Master Collection』の NINJA GAIDEN Σ に移植したパッチです。jinjia &amp; Adrian 氏の簡体字中国語化を先に入れておく必要があり、その翻訳内容には手を加えません。初版 2026-10-11：PC 飓风版 1.0.5。",
+  items:["<b>交差の法</b>：ジャスト防御で交差。判定は PS3 飓风版 1.0.5 と同じ（ゲームが防いだと判定する攻撃、命中の 1〜13 フレーム前に防御、状態を問わず、連続交差可、それ以外の攻撃は当たらない。投げ技とミサイルなどのガード不能攻撃は不可）。ゲーム内の「防御」のボタン設定に追従。双刀を含む全武器で交差。",
+   "交差後の Y で瞬間溜め。専用の火花と足元の衝撃波。全難易度でカルマ +1000、絶技と同じように「Intercept 1000」を表示。",
+   "交差の法と安らぎの腕輪を最初から所持（リュウのみ、レイチェルは対象外）。妖刀鬼徹は装備中に体力が減少（7 つのアイテム表すべて）。",
+   "タイトル画面の下に「Hurricane By 哈雅布撒」とバージョン（飓风origin版1.0.5 / 飓风new版1.0.5）を、翻訳者のクレジットと同じフォントで追加。翻訳者のクレジットはそのまま。",
+   "パッケージは二つ：初代の交差（origin、ハリケーンパックの技）と『Black』の交差（new、短い技）。違いは技だけで、同時には入れられません。切り替えるときは先に元に戻してください。"],
+  install:"導入：ゲームを終了し「安装补丁.bat」をダブルクリック。Steam のゲームフォルダを自動で探し、exe と databin の SHA-1 を確認してから書き込みます。二つのファイルの一部のバイトだけを変更し（サイズは不変）、セーブデータには触れません。「还原.bat」で元に戻せます。対象：Steam 版 buildid 9249168 ＋ 上記の中国語化（exe SHA-1 9ba11b5d86a5d86833c8f6bcfb16b97a052dfb0e、databin SHA-1 187eaadc6e6019c8b241b02d236795f874384ac6）。Steam の整合性確認やゲームの更新の後は入れ直してください。",
+  test:"テスト状況：origin を作者の Steam 版で確認——交差・エフェクト・表示・Y の瞬間溜め・アイテムの自動所持・鬼徹の体力減少・タイトルのクレジット、パッチの導入・復元・版違いの保護。new、双刀の交差、ミッション・サバイバル、ボタン変更後の交差は PC では未確認。既知の制限は PS3 版と同じ：『Black』の白い閃光・虹色の輪・残像は未復元、交差と絶技の表示が同時のときは絶技のみ。" }
+};
 
 const UI = {
  zh:{ eyebrow:"NINJA GAIDEN Σ · 更新日志", h1:"忍者龙剑传 <em>Σ</em><br>汉化与飓风补丁 更新日志",
-  sub:"PS3《NINJA GAIDEN Σ》（美版 BLUS30036）简体中文汉化（以日文原文为底本）与玩法复原（中文飓风版）。从 2026-10-07 的正式版 1.01 到 2026-10-11 的 1.0.5，全部正式版本的改动按时间倒序列出，可按版本筛选。",
-  dlN:["下载方式一"], dlSub:"百度网盘 · 完整游戏镜像（ISO）", dlCode:"百度网盘提取码", dlCopy:"复制百度网盘链接和提取码", dlBaidu:"百度网盘",
+  sub:"PS3《NINJA GAIDEN Σ》（美版 BLUS30036）简体中文汉化（以日文原文为底本）与玩法复原（中文飓风版）。从 2026-10-07 的正式版 1.01 到 2026-10-11 的 1.0.5，全部正式版本的改动按时间倒序列出，可按版本筛选。另有 Steam 大师合集 PC 版的飓风补丁（见下方“PC 版”一节）。",
+  dlN:["PS3 版下载","PC 版（Steam）补丁下载"], dlSub:"百度网盘 · 完整游戏镜像（ISO）", pcSub:"百度网盘 · Steam 大师合集 Σ 飓风补丁（zip）", pcTitle:"PC 版（Steam 大师合集）飓风补丁", dlCode:"百度网盘提取码", dlCopy:"复制百度网盘链接和提取码", dlBaidu:"百度网盘",
   featTitle:"当前功能一览（1.0.5）", featSub:"截至 2026-10-11 最新版 中文版 1.0.5 / 中文飓风new版 1.0.5 / 中文飓风origin版 1.0.5 的全部功能。✓ 有，— 无。", featCol:"功能", issuesTitle:"已知问题",
   pdf:"导出 PDF", md:"导出 Markdown", edTitle:"三个版本", cmpTitle:"飓风origin 与 飓风new 有什么区别",
   ed:{base:"中文版",new:"飓风new",origin:"飓风origin"}, lang:{zh:"简体中文"},
@@ -292,8 +340,8 @@ const UI = {
   base:"测试情况：只在 RPCS3 模拟器上实测（使用说明注明 v0.0.40 测试通过）；PS3 实机（CFW / HEN）未测；1.0.5 的三个镜像未开机实测（改动内容在测试构建里实测过）。原版：美版光盘 BLUS30036 + 官方更新 v01.01（更新版 EBOOT.BIN SHA-1 a20a5e638c14fa6aaa14dbfee4290dc8c9542c1b）。每个版本都是合并了官方更新的完整光盘镜像，附 .sha1 校验文件；1.0.5 镜像 SHA-1：中文版 67ff72e36366e2843b92214e90daa86654bd8194，飓风new b1cf51fde860f4e4bc4f4a545b332fefe7f86c18，飓风origin 4b480a460dbf800ec2e0874050234fc2e60d3468。换用新版本后存档通用。镜像命名：[简中版]PS3忍龙Σ1[哈雅布撒]<版本>.iso；[简中飓风版]PS3忍龙Σ1[哈雅布撒]<版本>-黑之章交差-new.iso / -一代交差-origin.iso（1.0.5 起加 new / origin 后缀）。",
   latestOf:"最新", vs:"对比项" },
  en:{ eyebrow:"NINJA GAIDEN Σ · CHANGELOG", h1:"NINJA GAIDEN <em>Σ</em><br>Chinese Translation &amp; Hurricane Patch Changelog",
-  sub:"A Simplified Chinese translation of the PS3 NINJA GAIDEN Σ (US, BLUS30036; translated from the Japanese text) plus restored gameplay features (the Hurricane builds). Every change in the official releases from 1.01 (2026-10-07) to 1.0.5 (2026-10-11), newest first, filterable by edition.",
-  dlN:["Download option 1"], dlSub:"Baidu Netdisk · full game images (ISO)", dlCode:"Baidu Netdisk code", dlCopy:"Copy Baidu Netdisk link + code", dlBaidu:"Baidu Netdisk",
+  sub:"A Simplified Chinese translation of the PS3 NINJA GAIDEN Σ (US, BLUS30036; translated from the Japanese text) plus restored gameplay features (the Hurricane builds). Every change in the official releases from 1.01 (2026-10-07) to 1.0.5 (2026-10-11), newest first, filterable by edition. A Hurricane patch for the Steam Master Collection PC version is described in the “PC” section below.",
+  dlN:["PS3 download","PC (Steam) patch download"], dlSub:"Baidu Netdisk · full game images (ISO)", pcSub:"Baidu Netdisk · Hurricane patch for the Steam Master Collection Σ (zip)", pcTitle:"PC (Steam Master Collection) Hurricane patch", dlCode:"Baidu Netdisk code", dlCopy:"Copy Baidu Netdisk link + code", dlBaidu:"Baidu Netdisk",
   featTitle:"Current features (1.0.5)", featSub:"Everything in the latest builds as of 2026-10-11: Chinese 1.0.5 / Hurricane new 1.0.5 / Hurricane origin 1.0.5. ✓ yes, — no.", featCol:"Feature", issuesTitle:"Known issues",
   pdf:"Export PDF", md:"Export Markdown", edTitle:"Three editions", cmpTitle:"Hurricane origin vs. Hurricane new",
   ed:{base:"Chinese",new:"Hurricane new",origin:"Hurricane origin"}, lang:{zh:"Simplified Chinese"},
@@ -311,8 +359,8 @@ const UI = {
   base:"Testing: tested in the RPCS3 emulator only (the usage notes name v0.0.40); not tested on a PS3 (CFW / HEN); the three 1.0.5 images have not been booted (their changes were tested in test builds). Source: US disc BLUS30036 + official update v01.01 (update EBOOT.BIN SHA-1 a20a5e638c14fa6aaa14dbfee4290dc8c9542c1b). Every release is a full disc image with the update merged in, with a .sha1 file; 1.0.5 image SHA-1: Chinese 67ff72e36366e2843b92214e90daa86654bd8194, Hurricane new b1cf51fde860f4e4bc4f4a545b332fefe7f86c18, Hurricane origin 4b480a460dbf800ec2e0874050234fc2e60d3468. Saves carry over when you update. File names: [简中版]PS3忍龙Σ1[哈雅布撒]<version>.iso; [简中飓风版]PS3忍龙Σ1[哈雅布撒]<version>-黑之章交差-new.iso / -一代交差-origin.iso (new / origin suffix from 1.0.5).",
   latestOf:"latest", vs:"" },
  ja:{ eyebrow:"NINJA GAIDEN Σ · 更新履歴", h1:"NINJA GAIDEN <em>Σ</em><br>中国語化・ハリケーンパッチ 更新履歴",
-  sub:"PS3『NINJA GAIDEN Σ』（北米版 BLUS30036）の簡体字中国語化（日本語原文から翻訳）と機能復元（中文飓风版）。2026-10-07 の正式版 1.01 から 2026-10-11 の 1.0.5 まで、正式版の変更点を新しい順に掲載。版で絞り込めます。",
-  dlN:["ダウンロード方法 1"], dlSub:"Baidu Netdisk · ゲームの完全イメージ（ISO）", dlCode:"Baidu Netdisk 抽出コード", dlCopy:"Baidu Netdisk のリンクとコードをコピー", dlBaidu:"Baidu Netdisk",
+  sub:"PS3『NINJA GAIDEN Σ』（北米版 BLUS30036）の簡体字中国語化（日本語原文から翻訳）と機能復元（中文飓风版）。2026-10-07 の正式版 1.01 から 2026-10-11 の 1.0.5 まで、正式版の変更点を新しい順に掲載。版で絞り込めます。Steam マスターコレクション PC 版用のハリケーンパッチは下の「PC 版」の節を参照。",
+  dlN:["PS3 版ダウンロード","PC 版（Steam）パッチのダウンロード"], dlSub:"Baidu Netdisk · ゲームの完全イメージ（ISO）", pcSub:"Baidu Netdisk · Steam 版マスターコレクション Σ 用ハリケーンパッチ（zip）", pcTitle:"PC 版（Steam マスターコレクション）ハリケーンパッチ", dlCode:"Baidu Netdisk 抽出コード", dlCopy:"Baidu Netdisk のリンクとコードをコピー", dlBaidu:"Baidu Netdisk",
   featTitle:"現在の機能一覧（1.0.5）", featSub:"2026-10-11 時点の最新版 中文版 1.0.5 / 飓风new 1.0.5 / 飓风origin 1.0.5 の全機能。✓ あり、— なし。", featCol:"機能", issuesTitle:"既知の問題",
   pdf:"PDF を出力", md:"Markdown を出力", edTitle:"3 つの版", cmpTitle:"ハリケーン origin と ハリケーン new の違い",
   ed:{base:"中国語版",new:"ハリケーン new",origin:"ハリケーン origin"}, lang:{zh:"簡体字中国語"},
@@ -533,7 +581,8 @@ function itemTags(ls, U){
   else { if (has("B")) out.push([U.ed.new,ED_COLOR.new]); if (has("B2")) out.push([U.ed.origin,ED_COLOR.origin]); }
   return out;
 }
-function dlOrder(U){ return [{key:"baidu", label:U.dlBaidu, url:DL_URL, code:DL_CODE, sub:U.dlSub, name:U.dlN[0]}]; }
+function dlOrder(U){ return [{key:"baidu", label:U.dlBaidu, url:DL_URL, code:DL_CODE, sub:U.dlSub, name:U.dlN[0]},
+  {key:"pc", label:U.dlBaidu, url:PC_URL, code:PC_CODE, sub:U.pcSub, name:U.dlN[1]}]; }
 function tx(o){ return o ? (o[st.lang] || o.zh) : ""; }
 
 function visible(){
@@ -566,6 +615,8 @@ function render(){
     FEAT.map(g => `<tr class="grp-row"><th colspan="4">${tx(g.g)}</th></tr>` + g.rows.map(r =>
       `<tr><td><span class="fn">${tx(r.n)}</span><span class="fd">${tx(r.d)}</span></td><td class="c">${cell(r.base)}</td><td class="c">${cell(r.h ?? r.new)}</td><td class="c">${cell(r.h ?? r.origin)}</td></tr>`).join("")).join("") + `</tbody></table>`;
   $("#issues").innerHTML = ISSUES[st.lang].map(i => `<li>${i}</li>`).join("");
+  const P = PC[st.lang];
+  $("#pc").innerHTML = `<p class="intro">${P.intro}</p><ul>${P.items.map(i => `<li>${i}</li>`).join("")}</ul><p class="sm">${P.install}</p><p class="sm">${P.test}</p>`;
   const C = CMP[st.lang];
   $("#cmp").innerHTML = `<p class="intro">${C.intro}</p><div class="tbl"><table>
     <thead><tr><th>${U.vs}</th><th class="new">${U.ed.new}</th><th class="origin">${U.ed.origin}</th></tr></thead>
@@ -594,6 +645,8 @@ function render(){
   $("#dlLink").href = DL_URL;
   const dlRows = dlOrder(U);
   $("#dlName").textContent = dlRows[0].name;
+  $("#pcLink").href = PC_URL;
+  $("#pcName").textContent = dlRows[1].name;
   $("#foot").innerHTML = dlRows.map(d => `<div class="dlfoot"><b>${d.name}</b> · ${d.label}${d.code ? ` · ${U.dlCode} <b>${d.code}</b>` : ""} · <a href="${d.url}" target="_blank" rel="noopener">${d.url}</a></div>`).join("") + `<div>${U.credit}</div><div>${U.legal}</div><div>${U.base}</div>`;
 }
 
@@ -602,6 +655,8 @@ function strip(s){ return s.replace(/<b>(.*?)<\/b>/g,"**$1**").replace(/<br>/g,"
 function toMarkdown(){
   const U = UI[st.lang], C = CMP[st.lang], L = [];
   L.push(`# ${strip(U.h1)}`, "", `> ${U.sub}`, "", ...dlOrder(U).map(d => `**${d.name}** · ${d.sub} · <${d.url}>${d.code ? `　${U.dlCode} \`${d.code}\`` : ""}`), "");
+  const P = PC[st.lang];
+  L.push(`## ${U.pcTitle}`, "", strip(P.intro), "", ...P.items.map(i => `- ${strip(i)}`), "", strip(P.install), "", strip(P.test), "");
   L.push(`## ${U.edTitle}`, "");
   for (const ed of ["base","new","origin"]){
     const ks = ORDER.filter(k => LINE[k].ed === ed);
@@ -674,6 +729,11 @@ document.addEventListener("click", e => {
   else if (b.id === "dlCopy"){
     const U = UI[st.lang], txt = `${DL_URL}  ${U.dlCode}: ${DL_CODE}`, ok = () => $("#dlMsg").textContent = U.copied;
     const fb = () => { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); ok(); } catch(e){ $("#dlMsg").textContent = txt; } t.remove(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fb); else fb();
+  }
+  else if (b.id === "pcCopy"){
+    const U = UI[st.lang], txt = `${PC_URL}  ${U.dlCode}: ${PC_CODE}`, ok = () => $("#pcMsg").textContent = U.copied;
+    const fb = () => { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); ok(); } catch(e){ $("#pcMsg").textContent = txt; } t.remove(); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fb); else fb();
   }
   else if (b.id === "mdClose") $("#modal").hidden = true;
