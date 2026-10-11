@@ -43,6 +43,13 @@ button{font:inherit;color:inherit}
 .seg{display:inline-flex;border:1px solid var(--ink-3);background:rgba(11,10,13,.6)}
 .seg button{background:none;border:0;padding:4px 11px;font-size:13px;cursor:pointer;color:var(--ash)}
 .seg button[aria-pressed="true"]{background:var(--blood);color:#fff}
+[hidden]{display:none!important}
+/* platform tabs: PS3 (ISO line) / PC (Steam patch) are described separately */
+.plat{display:flex;flex-wrap:wrap;gap:0;margin:0 0 18px;border:1px solid var(--ink-3);background:rgba(11,10,13,.6);width:max-content;max-width:100%}
+.plat button{background:none;border:0;padding:9px 20px;font-family:var(--f-display);font-weight:900;font-size:17px;cursor:pointer;color:var(--ash);letter-spacing:.03em}
+.plat button small{display:block;font-family:var(--f-body);font-weight:500;font-size:11.5px;letter-spacing:0;opacity:.85}
+.plat button[aria-selected="true"]{background:var(--blood);color:#fff}
+.plat button:not([aria-selected="true"]):hover{color:var(--bone)}
 .plbl{font-size:12px;color:var(--ash);align-self:center;margin-right:-2px}
 .langnote{margin:12px 0 0;font-size:13.5px;color:#cfc8bd;border-left:3px solid var(--gold);padding:6px 12px;background:rgba(207,166,80,.06);max-width:80ch}
 .lgb{font-family:var(--f-body);font-weight:700;font-size:10.5px;padding:0 6px;margin-left:6px;border-radius:2px;vertical-align:1px}
@@ -207,8 +214,12 @@ footer b,.qq{color:var(--bone)}
       </div>
     </div>
     <h1 data-ih="h1"></h1>
-    <p class="sub" data-i="sub"></p>
-    <div class="dl">
+    <div class="plat" id="plats" role="tablist" aria-label="Platform">
+      <button type="button" role="tab" data-plat="ps3"><span data-i="platPs3"></span><small data-i="platPs3s"></small></button>
+      <button type="button" role="tab" data-plat="pc"><span data-i="platPc"></span><small data-i="platPcs"></small></button>
+    </div>
+    <p class="sub" id="sub"></p>
+    <div class="dl" data-plat-only="ps3">
       <a class="go" id="dlLink" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>
         <span><span id="dlName"></span><small data-i="dlSub"></small></span>
@@ -217,7 +228,7 @@ footer b,.qq{color:var(--bone)}
       <button class="btn" type="button" id="dlCopy" data-i="dlCopy"></button>
       <span class="msg" id="dlMsg"></span>
     </div>
-    <div class="dl">
+    <div class="dl" data-plat-only="pc">
       <a class="go" id="pcLink" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>
         <span><span id="pcName"></span><small data-i="pcSub"></small></span>
@@ -231,30 +242,30 @@ footer b,.qq{color:var(--bone)}
 </header>
 
 <main>
-  <section class="wrap">
+  <section class="wrap" data-plat-only="pc">
+    <h2 class="h2" data-i="pcTitle"></h2>
+    <div class="pc" id="pc"></div>
+  </section>
+
+  <section class="wrap" data-plat-only="ps3">
     <h2 class="h2" data-i="edTitle"></h2>
     <div class="eds" id="eds"></div>
     <p class="langnote" data-i="langNote"></p>
   </section>
 
-  <section class="wrap">
-    <h2 class="h2" data-i="pcTitle"></h2>
-    <div class="pc" id="pc"></div>
-  </section>
-
-  <section class="wrap">
+  <section class="wrap" data-plat-only="ps3">
     <h2 class="h2" data-i="featTitle"></h2>
     <p class="sub2" data-i="featSub" style="color:var(--ash);margin:-6px 0 12px;font-size:13.5px"></p>
     <div class="feat"><div class="tbl" id="feat"></div></div>
     <div class="issues"><h3 data-i="issuesTitle"></h3><ul id="issues"></ul></div>
   </section>
 
-  <section class="wrap">
+  <section class="wrap" data-plat-only="ps3">
     <h2 class="h2" data-i="cmpTitle"></h2>
     <div class="cmp" id="cmp"></div>
   </section>
 
-  <nav class="bar" aria-label="Filter">
+  <nav class="bar" aria-label="Filter" data-plat-only="ps3">
     <div class="wrap">
       <div class="grp" id="fEd"></div>
       <div class="grp" id="fLang"></div>
@@ -262,7 +273,7 @@ footer b,.qq{color:var(--bone)}
     </div>
   </nav>
 
-  <div class="wrap"><div class="tl" id="tl"></div></div>
+  <div class="wrap" data-plat-only="ps3"><div class="tl" id="tl"></div></div>
 </main>
 
 <footer><div class="wrap" id="foot"></div></footer>
@@ -321,7 +332,11 @@ const PC = {
 
 const UI = {
  zh:{ eyebrow:"NINJA GAIDEN Σ · 更新日志", h1:"忍者龙剑传 <em>Σ</em><br>汉化与飓风补丁 更新日志",
-  sub:"PS3《NINJA GAIDEN Σ》（美版 BLUS30036）简体中文汉化（以日文原文为底本）与玩法复原（中文飓风版）。从 2026-10-07 的正式版 1.01 到 2026-10-11 的 1.0.5，全部正式版本的改动按时间倒序列出，可按版本筛选。另有 Steam 大师合集 PC 版的飓风补丁（见下方“PC 版”一节）。",
+  sub:"PS3《NINJA GAIDEN Σ》（美版 BLUS30036）简体中文汉化（以日文原文为底本）与玩法复原（中文飓风版）。从 2026-10-07 的正式版 1.01 到 2026-10-11 的 1.0.5，全部正式版本的改动按时间倒序列出，可按版本筛选。",
+  subPc:"Steam《NINJA GAIDEN: Master Collection》里的 NINJA GAIDEN Σ（PC 版）飓风补丁：把 PS3 中文飓风版 1.0.5 的玩法复原移植过来，装在 jinjia &amp; Adrian 的简体中文汉化之上。与 PS3 版是两个独立的发布，下载、安装方式都不同。",
+  platPs3:"PS3 版", platPs3s:"汉化 + 飓风版 · 完整镜像", platPc:"PC 版（Steam）", platPcs:"大师合集 Σ · 飓风补丁",
+  pcCredit:"玩法复原：<b>b站 哈雅布撒</b>　简体中文汉化：<b>jinjia &amp; Adrian</b>　反馈 QQ：<span class=\"qq\">2682557218</span>",
+  pcLegal:"《忍者龙剑传 Σ》©KOEI TECMO GAMES / Team NINJA。本补丁为爱好者非商业作品，仅供拥有正版游戏的玩家使用，请勿用于商业用途，请勿二次打包倒卖。",
   dlN:["PS3 版下载","PC 版（Steam）补丁下载"], dlSub:"百度网盘 · 完整游戏镜像（ISO）", pcSub:"百度网盘 · Steam 大师合集 Σ 飓风补丁（zip）", pcTitle:"PC 版（Steam 大师合集）飓风补丁", dlCode:"百度网盘提取码", dlCopy:"复制百度网盘链接和提取码", dlBaidu:"百度网盘",
   featTitle:"当前功能一览（1.0.5）", featSub:"截至 2026-10-11 最新版 中文版 1.0.5 / 中文飓风new版 1.0.5 / 中文飓风origin版 1.0.5 的全部功能。✓ 有，— 无。", featCol:"功能", issuesTitle:"已知问题",
   pdf:"导出 PDF", md:"导出 Markdown", edTitle:"三个版本", cmpTitle:"飓风origin 与 飓风new 有什么区别",
@@ -340,7 +355,11 @@ const UI = {
   base:"测试情况：只在 RPCS3 模拟器上实测（使用说明注明 v0.0.40 测试通过）；PS3 实机（CFW / HEN）未测；1.0.5 的三个镜像未开机实测（改动内容在测试构建里实测过）。原版：美版光盘 BLUS30036 + 官方更新 v01.01（更新版 EBOOT.BIN SHA-1 a20a5e638c14fa6aaa14dbfee4290dc8c9542c1b）。每个版本都是合并了官方更新的完整光盘镜像，附 .sha1 校验文件；1.0.5 镜像 SHA-1：中文版 67ff72e36366e2843b92214e90daa86654bd8194，飓风new b1cf51fde860f4e4bc4f4a545b332fefe7f86c18，飓风origin 4b480a460dbf800ec2e0874050234fc2e60d3468。换用新版本后存档通用。镜像命名：[简中版]PS3忍龙Σ1[哈雅布撒]<版本>.iso；[简中飓风版]PS3忍龙Σ1[哈雅布撒]<版本>-黑之章交差-new.iso / -一代交差-origin.iso（1.0.5 起加 new / origin 后缀）。",
   latestOf:"最新", vs:"对比项" },
  en:{ eyebrow:"NINJA GAIDEN Σ · CHANGELOG", h1:"NINJA GAIDEN <em>Σ</em><br>Chinese Translation &amp; Hurricane Patch Changelog",
-  sub:"A Simplified Chinese translation of the PS3 NINJA GAIDEN Σ (US, BLUS30036; translated from the Japanese text) plus restored gameplay features (the Hurricane builds). Every change in the official releases from 1.01 (2026-10-07) to 1.0.5 (2026-10-11), newest first, filterable by edition. A Hurricane patch for the Steam Master Collection PC version is described in the “PC” section below.",
+  sub:"A Simplified Chinese translation of the PS3 NINJA GAIDEN Σ (US, BLUS30036; translated from the Japanese text) plus restored gameplay features (the Hurricane builds). Every change in the official releases from 1.01 (2026-10-07) to 1.0.5 (2026-10-11), newest first, filterable by edition.",
+  subPc:"A Hurricane patch for NINJA GAIDEN Σ in the Steam NINJA GAIDEN: Master Collection (PC): the restored gameplay of PS3 Hurricane 1.0.5, ported and installed on top of the Simplified Chinese translation by jinjia &amp; Adrian. It is a separate release from the PS3 builds, with its own download and installation.",
+  platPs3:"PS3", platPs3s:"Translation + Hurricane · full images", platPc:"PC (Steam)", platPcs:"Master Collection Σ · Hurricane patch",
+  pcCredit:"Gameplay restoration: <b>哈雅布撒 (bilibili)</b>　Simplified Chinese translation: <b>jinjia &amp; Adrian</b>　Feedback QQ: <span class=\"qq\">2682557218</span>",
+  pcLegal:"NINJA GAIDEN Σ ©KOEI TECMO GAMES / Team NINJA. This patch is a non-commercial fan work for owners of the original game; do not sell or repackage it.",
   dlN:["PS3 download","PC (Steam) patch download"], dlSub:"Baidu Netdisk · full game images (ISO)", pcSub:"Baidu Netdisk · Hurricane patch for the Steam Master Collection Σ (zip)", pcTitle:"PC (Steam Master Collection) Hurricane patch", dlCode:"Baidu Netdisk code", dlCopy:"Copy Baidu Netdisk link + code", dlBaidu:"Baidu Netdisk",
   featTitle:"Current features (1.0.5)", featSub:"Everything in the latest builds as of 2026-10-11: Chinese 1.0.5 / Hurricane new 1.0.5 / Hurricane origin 1.0.5. ✓ yes, — no.", featCol:"Feature", issuesTitle:"Known issues",
   pdf:"Export PDF", md:"Export Markdown", edTitle:"Three editions", cmpTitle:"Hurricane origin vs. Hurricane new",
@@ -359,7 +378,11 @@ const UI = {
   base:"Testing: tested in the RPCS3 emulator only (the usage notes name v0.0.40); not tested on a PS3 (CFW / HEN); the three 1.0.5 images have not been booted (their changes were tested in test builds). Source: US disc BLUS30036 + official update v01.01 (update EBOOT.BIN SHA-1 a20a5e638c14fa6aaa14dbfee4290dc8c9542c1b). Every release is a full disc image with the update merged in, with a .sha1 file; 1.0.5 image SHA-1: Chinese 67ff72e36366e2843b92214e90daa86654bd8194, Hurricane new b1cf51fde860f4e4bc4f4a545b332fefe7f86c18, Hurricane origin 4b480a460dbf800ec2e0874050234fc2e60d3468. Saves carry over when you update. File names: [简中版]PS3忍龙Σ1[哈雅布撒]<version>.iso; [简中飓风版]PS3忍龙Σ1[哈雅布撒]<version>-黑之章交差-new.iso / -一代交差-origin.iso (new / origin suffix from 1.0.5).",
   latestOf:"latest", vs:"" },
  ja:{ eyebrow:"NINJA GAIDEN Σ · 更新履歴", h1:"NINJA GAIDEN <em>Σ</em><br>中国語化・ハリケーンパッチ 更新履歴",
-  sub:"PS3『NINJA GAIDEN Σ』（北米版 BLUS30036）の簡体字中国語化（日本語原文から翻訳）と機能復元（中文飓风版）。2026-10-07 の正式版 1.01 から 2026-10-11 の 1.0.5 まで、正式版の変更点を新しい順に掲載。版で絞り込めます。Steam マスターコレクション PC 版用のハリケーンパッチは下の「PC 版」の節を参照。",
+  sub:"PS3『NINJA GAIDEN Σ』（北米版 BLUS30036）の簡体字中国語化（日本語原文から翻訳）と機能復元（中文飓风版）。2026-10-07 の正式版 1.01 から 2026-10-11 の 1.0.5 まで、正式版の変更点を新しい順に掲載。版で絞り込めます。",
+  subPc:"Steam『NINJA GAIDEN: Master Collection』の NINJA GAIDEN Σ（PC 版）用ハリケーンパッチ：PS3 版 中文飓风版 1.0.5 の機能復元を移植し、jinjia &amp; Adrian 氏の簡体字中国語化の上に導入します。PS3 版とは別の配布で、ダウンロードも導入方法も異なります。",
+  platPs3:"PS3 版", platPs3s:"中国語化 + 飓风版 · 完全イメージ", platPc:"PC 版（Steam）", platPcs:"マスターコレクション Σ · ハリケーンパッチ",
+  pcCredit:"機能復元：<b>哈雅布撒（bilibili）</b>　簡体字中国語化：<b>jinjia &amp; Adrian</b>　連絡先 QQ：<span class=\"qq\">2682557218</span>",
+  pcLegal:"『NINJA GAIDEN Σ』©KOEI TECMO GAMES / Team NINJA。本パッチは非営利のファン作品です。正規のゲームをお持ちの方のみご利用ください。販売・再配布パッケージ化はご遠慮ください。",
   dlN:["PS3 版ダウンロード","PC 版（Steam）パッチのダウンロード"], dlSub:"Baidu Netdisk · ゲームの完全イメージ（ISO）", pcSub:"Baidu Netdisk · Steam 版マスターコレクション Σ 用ハリケーンパッチ（zip）", pcTitle:"PC 版（Steam マスターコレクション）ハリケーンパッチ", dlCode:"Baidu Netdisk 抽出コード", dlCopy:"Baidu Netdisk のリンクとコードをコピー", dlBaidu:"Baidu Netdisk",
   featTitle:"現在の機能一覧（1.0.5）", featSub:"2026-10-11 時点の最新版 中文版 1.0.5 / 飓风new 1.0.5 / 飓风origin 1.0.5 の全機能。✓ あり、— なし。", featCol:"機能", issuesTitle:"既知の問題",
   pdf:"PDF を出力", md:"Markdown を出力", edTitle:"3 つの版", cmpTitle:"ハリケーン origin と ハリケーン new の違い",
@@ -555,12 +578,14 @@ const ISSUES = {
 
 /* ===== state ===== */
 const $ = s => document.querySelector(s);
-const st = {lang:"zh", ed:"all", ln:"all"};
+const st = {lang:"zh", ed:"all", ln:"all", plat:"ps3"};
 function load(k){ try { return localStorage.getItem("ngs-cl-"+k); } catch(e){ return null; } }
 function save(k,v){ try { localStorage.setItem("ngs-cl-"+k, v); } catch(e){} }
 { const nav=(navigator.language||"zh").toLowerCase(); st.lang = nav.startsWith("ja") ? "ja" : nav.startsWith("zh") ? "zh" : "en"; }
 const sl = load("lang"); if (UI[sl]) st.lang = sl;
-const h = location.hash.slice(1); if (UI[h]) st.lang = h;
+const sp = load("plat"); if (sp === "ps3" || sp === "pc") st.plat = sp;
+/* #zh #en #ja pick the page language, #pc #ps3 the platform tab (combinable: #pc-en) */
+for (const h of location.hash.slice(1).split(/[-,&]/)){ if (UI[h]) st.lang = h; else if (h === "pc" || h === "ps3") st.plat = h; }
 const se = load("ed"); if (["all","base","new","origin"].includes(se)) st.ed = se;
 const sn = load("ln"); if (["all","zh"].includes(sn)) st.ln = sn;
 
@@ -581,8 +606,8 @@ function itemTags(ls, U){
   else { if (has("B")) out.push([U.ed.new,ED_COLOR.new]); if (has("B2")) out.push([U.ed.origin,ED_COLOR.origin]); }
   return out;
 }
-function dlOrder(U){ return [{key:"baidu", label:U.dlBaidu, url:DL_URL, code:DL_CODE, sub:U.dlSub, name:U.dlN[0]},
-  {key:"pc", label:U.dlBaidu, url:PC_URL, code:PC_CODE, sub:U.pcSub, name:U.dlN[1]}]; }
+function dlOrder(U){ return [{key:"baidu", plat:"ps3", label:U.dlBaidu, url:DL_URL, code:DL_CODE, sub:U.dlSub, name:U.dlN[0]},
+  {key:"pc", plat:"pc", label:U.dlBaidu, url:PC_URL, code:PC_CODE, sub:U.pcSub, name:U.dlN[1]}]; }
 function tx(o){ return o ? (o[st.lang] || o.zh) : ""; }
 
 function visible(){
@@ -601,6 +626,9 @@ function render(){
   document.querySelectorAll("[data-i]").forEach(e => e.textContent = U[e.dataset.i]);
   document.querySelectorAll("[data-ih]").forEach(e => e.innerHTML = U[e.dataset.ih]);
   document.querySelectorAll("#langs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === st.lang));
+  document.querySelectorAll("#plats button").forEach(b => b.setAttribute("aria-selected", b.dataset.plat === st.plat));
+  document.querySelectorAll("[data-plat-only]").forEach(e => e.hidden = e.dataset.platOnly !== st.plat);
+  $("#sub").innerHTML = st.plat === "pc" ? U.subPc : U.sub;
 
   $("#eds").innerHTML = ["base","new","origin"].map(ed => {
     const ks = ORDER.filter(k => LINE[k].ed === ed);
@@ -647,16 +675,23 @@ function render(){
   $("#dlName").textContent = dlRows[0].name;
   $("#pcLink").href = PC_URL;
   $("#pcName").textContent = dlRows[1].name;
-  $("#foot").innerHTML = dlRows.map(d => `<div class="dlfoot"><b>${d.name}</b> · ${d.label}${d.code ? ` · ${U.dlCode} <b>${d.code}</b>` : ""} · <a href="${d.url}" target="_blank" rel="noopener">${d.url}</a></div>`).join("") + `<div>${U.credit}</div><div>${U.legal}</div><div>${U.base}</div>`;
+  const fd = dlRows.filter(d => d.plat === st.plat).map(d => `<div class="dlfoot"><b>${d.name}</b> · ${d.label}${d.code ? ` · ${U.dlCode} <b>${d.code}</b>` : ""} · <a href="${d.url}" target="_blank" rel="noopener">${d.url}</a></div>`).join("");
+  $("#foot").innerHTML = fd + (st.plat === "pc" ? `<div>${U.pcCredit}</div><div>${U.pcLegal}</div>` : `<div>${U.credit}</div><div>${U.legal}</div><div>${U.base}</div>`);
 }
 
 /* ===== markdown export (current language + filter) ===== */
 function strip(s){ return s.replace(/<b>(.*?)<\/b>/g,"**$1**").replace(/<br>/g," ").replace(/<[^>]+>/g,"").replace(/&amp;/g,"&").replace(/&nbsp;/g," "); }
 function toMarkdown(){
   const U = UI[st.lang], C = CMP[st.lang], L = [];
-  L.push(`# ${strip(U.h1)}`, "", `> ${U.sub}`, "", ...dlOrder(U).map(d => `**${d.name}** · ${d.sub} · <${d.url}>${d.code ? `　${U.dlCode} \`${d.code}\`` : ""}`), "");
-  const P = PC[st.lang];
-  L.push(`## ${U.pcTitle}`, "", strip(P.intro), "", ...P.items.map(i => `- ${strip(i)}`), "", strip(P.install), "", strip(P.test), "");
+  const dl = dlOrder(U).filter(d => d.plat === st.plat).map(d => `**${d.name}** · ${d.sub} · <${d.url}>${d.code ? `　${U.dlCode} \`${d.code}\`` : ""}`);
+  if (st.plat === "pc"){
+    const P = PC[st.lang];
+    L.push(`# ${strip(U.h1)} · ${U.platPc}`, "", `> ${strip(U.subPc)}`, "", ...dl, "",
+      `## ${U.pcTitle}`, "", strip(P.intro), "", ...P.items.map(i => `- ${strip(i)}`), "", strip(P.install), "", strip(P.test), "",
+      "---", "", strip(U.pcCredit), "", U.pcLegal, "");
+    return L.join("\n");
+  }
+  L.push(`# ${strip(U.h1)} · ${U.platPs3}`, "", `> ${U.sub}`, "", ...dl, "");
   L.push(`## ${U.edTitle}`, "");
   for (const ed of ["base","new","origin"]){
     const ks = ORDER.filter(k => LINE[k].ed === ed);
@@ -719,6 +754,7 @@ function alertBar(msg){ openMd(); $("#mdMsg").textContent = msg; }
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.lang){ st.lang = b.dataset.lang; save("lang", st.lang); render(); }
+  else if (b.dataset.plat){ st.plat = b.dataset.plat; save("plat", st.plat); render(); }
   else if (b.dataset.fed){ st.ed = b.dataset.fed; save("ed", st.ed); render(); }
   else if (b.dataset.fln){ st.ln = b.dataset.fln; save("ln", st.ln); render(); }
   else if (b.dataset.ed){ st.ed = b.dataset.ed; st.ln = "all"; save("ed", st.ed); save("ln", st.ln); render(); $(".bar").scrollIntoView({behavior:"smooth"}); }
