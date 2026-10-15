@@ -217,6 +217,7 @@ footer b,.qq{color:var(--bone)}
     <div class="plat" id="plats" role="tablist" aria-label="Platform">
       <button type="button" role="tab" data-plat="ps3"><span data-i="platPs3"></span><small data-i="platPs3s"></small></button>
       <button type="button" role="tab" data-plat="pc"><span data-i="platPc"></span><small data-i="platPcs"></small></button>
+      <button type="button" role="tab" data-plat="vita"><span data-i="platVita"></span><small data-i="platVitas"></small></button>
     </div>
     <p class="sub" id="sub"></p>
     <div class="dl" data-plat-only="ps3">
@@ -237,6 +238,15 @@ footer b,.qq{color:var(--bone)}
       <button class="btn" type="button" id="pcCopy" data-i="dlCopy"></button>
       <span class="msg" id="pcMsg"></span>
     </div>
+    <div class="dl" data-plat-only="vita">
+      <a class="go" id="vitaLink" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>
+        <span><span id="vitaName"></span><small data-i="vitaSub"></small></span>
+      </a>
+      <span class="code"><span data-i="dlCode"></span><b>c2q6</b></span>
+      <button class="btn" type="button" id="vitaCopy" data-i="dlCopy"></button>
+      <span class="msg" id="vitaMsg"></span>
+    </div>
     <div class="slash"></div>
   </div>
 </header>
@@ -245,6 +255,11 @@ footer b,.qq{color:var(--bone)}
   <section class="wrap" data-plat-only="pc">
     <h2 class="h2" data-i="pcTitle"></h2>
     <div class="pc" id="pc"></div>
+  </section>
+
+  <section class="wrap" data-plat-only="vita">
+    <h2 class="h2" data-i="vitaTitle"></h2>
+    <div class="pc" id="vita"></div>
   </section>
 
   <section class="wrap" data-plat-only="ps3">
@@ -330,14 +345,51 @@ const PC = {
   test:"テスト状況：origin を作者の Steam 版で確認——交差・エフェクト・表示・Y の瞬間溜め・アイテムの自動所持・鬼徹の体力減少・タイトルのクレジット、パッチの導入・復元・版違いの保護。new、双刀の交差、ミッション・サバイバル、ボタン変更後の交差は PC では未確認。既知の制限は PS3 版と同じ：『Black』の白い閃光・虹色の輪・残像は未復元、交差と絶技の表示が同時のときは絶技のみ。" }
 };
 
+/* PS Vita (NINJA GAIDEN Σ PLUS, PCSE00021, Mai 汉化 2.0): separate project E:\games\emu\ninja gaiden sigma plus local;
+   sources: its docs/RELEASE_Vita飓风版1.0.5.md, docs/03, docs/发版说明/使用说明_Vita.txt. Released as full patched games. */
+const VITA_URL = "https://pan.baidu.com/s/1_kVUsxMQq7Cv1GdUXVzDOQ?pwd=c2q6", VITA_CODE = "c2q6";
+const VITA = {
+ zh:{ intro:"把 PS3 / PC 飓风版 1.0.5 的玩法复原移植到 PS Vita《NINJA GAIDEN Σ PLUS》（美版 PCSE00021）的 Mai 汉化 2.0 中文版（标题显示“jinjia汉化”），不改动汉化内容。以已打好补丁的完整游戏发布。2026-10-15 首次发布：Vita 飓风版 1.0.5。",
+  items:["<b>秘传「交差之法」</b>：精防即交差，规则与 PC / PS3 飓风版 1.0.5 相同；跟随游戏里“防御”的按键设置；所有武器都能交差，包括双刀。",
+   "交差后接 △ 瞬间蓄力；专属火花和脚下气浪；+1000 业（所有难度），像绝技一样弹出“Intercept 1000”。",
+   "交差之法与宁静腕轮开局自带（隼龙；瑞秋不给）；妖刀鬼彻装备期间持续扣血（6 个道具表全部，扣到 1 为止）。",
+   "标题画面版权条下面加一行“Hurricane By 哈雅布撒　　飓风origin版1.0.5 / 飓风new版1.0.5”（思源黑体），原来那行不动。",
+   "修正 Vita 版独有的问题：游戏给交差成功的无敌计时是 13 帧，Vita 版每次减 2 会跳过 0，导致交差后一直打不中；改为 14 并加了保护。",
+   "两个包：飓风包交差（飓风包原版交差招式）、黑之章交差（黑之章短版招式），只差交差招式，二选一。"],
+  install:"安装：解压后把 PCSE00021 整个拷到 Vita 的 ux0:app/（已经装过的先备份再覆盖；没装过的拷进去后在 VitaShell 里刷新 LiveArea）。改动的只有 eboot.bin 和 resources.psarc，其余 662 个文件与汉化版原件相同。",
+  test:"测试情况：作者在 PS Vita 实机上测试；开发时在 Vita3K 模拟器上实测一代交差版的交差、接 △ 瞬间蓄力、特效、加业、弹分、自动补道具、鬼彻扣血、标题署名、交差后受击正常（Vita3K 不支持这种转储，测试时用的是只为模拟器改过加载方式的副本）。黑之章交差版、双刀交差、任务与生存模式未单独实测。已知限制同其他版本：黑之章交差的白光、彩虹圆环、残影未恢复；交差和绝技同时弹分时只显示绝技。" },
+ en:{ intro:"The restored gameplay of PS3 / PC Hurricane 1.0.5, ported to the Mai 汉化 2.0 Chinese version of PS Vita NINJA GAIDEN Σ PLUS (US, PCSE00021; the title shows “jinjia汉化”), translation untouched. Released as fully patched games. First release 2026-10-15: Vita Hurricane 1.0.5.",
+  items:["<b>Intercept</b>: perfect block = Intercept, same rule as PC / PS3 Hurricane 1.0.5; follows the in-game Guard button setting; every weapon including the Dual Katana.",
+   "Instant charge with △ after an Intercept; its own sparks and a burst at Ryu's feet; +1000 karma on every difficulty with an “Intercept 1000” pop-up like Ultimate Techniques.",
+   "Intercept and the Armlet of Tranquility from the start (Ryu; not Rachel); the Kitetsu drains health while equipped (all 6 item tables, down to 1).",
+   "A second line under the title screen's copyright strip: “Hurricane By 哈雅布撒　　飓风origin版1.0.5 / 飓风new版1.0.5” (Noto Sans SC); the original line is unchanged.",
+   "Fixes a Vita-only problem: the game gives a successful Intercept 13 frames of invulnerability, but the Vita build counts down in steps of 2 and skips 0, so Ryu could never be hit again; now 14, with a safeguard.",
+   "Two packages: Hurricane Pack Intercept (the Hurricane Pack move) and Black's Intercept (Black's short move); they differ only in the move — pick one."],
+  install:"Install: unpack and copy the whole PCSE00021 folder to ux0:app/ on the Vita (back up first if the game is installed; otherwise refresh the LiveArea in VitaShell). Only eboot.bin and resources.psarc differ; the other 662 files are the translated originals.",
+  test:"Testing: tested by the author on a real PS Vita; during development the Hurricane Pack package was tested in the Vita3K emulator — Intercept, △ instant charge, effects, karma, pop-up, items given at start, Kitetsu drain, title credit, being hit normally after an Intercept (Vita3K cannot run this kind of dump, so a copy with an emulator-only loading change was used). Black's package, Dual Katana Intercept, missions and survival were not tested separately. Known limits as elsewhere: Black's white flash, rainbow ring and afterimages are not restored; simultaneous Intercept and Ultimate Technique pop-ups show only the latter." },
+ ja:{ intro:"PS3 / PC 飓风版 1.0.5 の機能復元を、PS Vita『NINJA GAIDEN Σ PLUS』（北米版 PCSE00021）の Mai 汉化 2.0 中国語版（タイトルに「jinjia汉化」と表示）に移植しました。翻訳内容には手を加えません。パッチ適用済みのゲーム一式として配布。初版 2026-10-15：Vita 飓风版 1.0.5。",
+  items:["<b>交差の法</b>：ジャスト防御で交差。判定は PC / PS3 飓风版 1.0.5 と同じ。ゲーム内の「防御」のボタン設定に追従。双刀を含む全武器で交差。",
+   "交差後の △ で瞬間溜め。専用の火花と足元の衝撃波。全難易度でカルマ +1000、絶技と同じように「Intercept 1000」を表示。",
+   "交差の法と安らぎの腕輪を最初から所持（リュウのみ、レイチェルは対象外）。妖刀鬼徹は装備中に体力が減少（6 つのアイテム表すべて、1 まで）。",
+   "タイトル画面のコピーライト表示の下に「Hurricane By 哈雅布撒　　飓风origin版1.0.5 / 飓风new版1.0.5」を一行追加（Noto Sans SC）。元の行はそのまま。",
+   "Vita 版だけの問題を修正：交差成功時の無敵時間が 13 フレームで、Vita 版は 2 ずつ減らすため 0 を飛ばし、交差後にリュウへ攻撃が当たらなくなっていました。14 に変更し、保護も追加。",
+   "パッケージは二つ：ハリケーンパックの交差（元の技）と『Black』の交差（短い技）。違いは技だけ、どちらか一つを選んでください。"],
+  install:"導入：解凍した PCSE00021 フォルダを丸ごと Vita の ux0:app/ にコピー（導入済みならバックアップしてから上書き、未導入なら VitaShell で LiveArea を更新）。変更は eboot.bin と resources.psarc だけで、他の 662 ファイルは中国語化版のままです。",
+  test:"テスト状況：作者が PS Vita 実機で確認。開発中は Vita3K エミュレータでハリケーンパック版の交差・△ の瞬間溜め・エフェクト・カルマ・表示・アイテムの自動所持・鬼徹の体力減少・タイトルのクレジット・交差後に通常どおり被弾することを確認（Vita3K はこの種のダンプを動かせないため、エミュレータ用に読み込み方だけを変えたコピーを使用）。『Black』版、双刀の交差、ミッション・サバイバルは個別には未確認。既知の制限は他版と同じ：『Black』の白い閃光・虹色の輪・残像は未復元、交差と絶技の表示が同時のときは絶技のみ。" }
+};
+
 const UI = {
  zh:{ eyebrow:"NINJA GAIDEN Σ · 更新日志", h1:"忍者龙剑传 <em>Σ</em><br>汉化与飓风补丁 更新日志",
   sub:"PS3《NINJA GAIDEN Σ》（美版 BLUS30036）简体中文汉化（以日文原文为底本）与玩法复原（中文飓风版）。从 2026-10-07 的正式版 1.01 到 2026-10-11 的 1.0.5，全部正式版本的改动按时间倒序列出，可按版本筛选。",
   subPc:"Steam《NINJA GAIDEN: Master Collection》里的 NINJA GAIDEN Σ（PC 版）飓风补丁：把 PS3 中文飓风版 1.0.5 的玩法复原移植过来，装在 jinjia &amp; Adrian 的简体中文汉化之上。与 PS3 版是两个独立的发布，下载、安装方式都不同。",
   platPs3:"PS3 版", platPs3s:"汉化 + 飓风版 · 完整镜像", platPc:"PC 版（Steam）", platPcs:"大师合集 Σ · 飓风补丁",
+  platVita:"PS Vita 版", platVitas:"Σ PLUS · 飓风版完整游戏", vitaTitle:"PS Vita 版（Σ PLUS）飓风版", vitaSub:"百度网盘 · 已打好补丁的完整游戏（zip）",
+  subVita:"PS Vita《NINJA GAIDEN Σ PLUS》（美版 PCSE00021）Mai 汉化 2.0 中文版的飓风版：PS3 / PC 飓风版 1.0.5 的玩法移植，以已打好补丁的完整游戏发布。与 PS3、PC 版是各自独立的发布。",
+  vitaCredit:"玩法复原：<b>b站 哈雅布撒</b>　中文汉化：Mai 汉化 2.0 版（标题显示 jinjia汉化）　反馈 QQ：<span class=\"qq\">2682557218</span>",
+  vitaLegal:"《忍者龙剑传 Σ PLUS》©KOEI TECMO GAMES / Team NINJA。本补丁为爱好者非商业作品，仅供拥有正版游戏的玩家使用，请勿用于商业用途，请勿二次打包倒卖。",
   pcCredit:"玩法复原：<b>b站 哈雅布撒</b>　简体中文汉化：<b>jinjia &amp; Adrian</b>　反馈 QQ：<span class=\"qq\">2682557218</span>",
   pcLegal:"《忍者龙剑传 Σ》©KOEI TECMO GAMES / Team NINJA。本补丁为爱好者非商业作品，仅供拥有正版游戏的玩家使用，请勿用于商业用途，请勿二次打包倒卖。",
-  dlN:["PS3 版下载","PC 版（Steam）补丁下载"], dlSub:"百度网盘 · 完整游戏镜像（ISO）", pcSub:"百度网盘 · Steam 大师合集 Σ 飓风补丁（zip）", pcTitle:"PC 版（Steam 大师合集）飓风补丁", dlCode:"百度网盘提取码", dlCopy:"复制百度网盘链接和提取码", dlBaidu:"百度网盘",
+  dlN:["PS3 版下载","PC 版（Steam）补丁下载","PS Vita 版下载"], dlSub:"百度网盘 · 完整游戏镜像（ISO）", pcSub:"百度网盘 · Steam 大师合集 Σ 飓风补丁（zip）", pcTitle:"PC 版（Steam 大师合集）飓风补丁", dlCode:"百度网盘提取码", dlCopy:"复制百度网盘链接和提取码", dlBaidu:"百度网盘",
   featTitle:"当前功能一览（1.0.5）", featSub:"截至 2026-10-11 最新版 中文版 1.0.5 / 中文飓风new版 1.0.5 / 中文飓风origin版 1.0.5 的全部功能。✓ 有，— 无。", featCol:"功能", issuesTitle:"已知问题",
   pdf:"导出 PDF", md:"导出 Markdown", edTitle:"三个版本", cmpTitle:"飓风origin 与 飓风new 有什么区别",
   ed:{base:"中文版",new:"飓风new",origin:"飓风origin"}, lang:{zh:"简体中文"},
@@ -358,9 +410,13 @@ const UI = {
   sub:"A Simplified Chinese translation of the PS3 NINJA GAIDEN Σ (US, BLUS30036; translated from the Japanese text) plus restored gameplay features (the Hurricane builds). Every change in the official releases from 1.01 (2026-10-07) to 1.0.5 (2026-10-11), newest first, filterable by edition.",
   subPc:"A Hurricane patch for NINJA GAIDEN Σ in the Steam NINJA GAIDEN: Master Collection (PC): the restored gameplay of PS3 Hurricane 1.0.5, ported and installed on top of the Simplified Chinese translation by jinjia &amp; Adrian. It is a separate release from the PS3 builds, with its own download and installation.",
   platPs3:"PS3", platPs3s:"Translation + Hurricane · full images", platPc:"PC (Steam)", platPcs:"Master Collection Σ · Hurricane patch",
+  platVita:"PS Vita", platVitas:"Σ PLUS · patched full game", vitaTitle:"PS Vita (Σ PLUS) Hurricane", vitaSub:"Baidu Netdisk · fully patched game (zip)",
+  subVita:"Hurricane for the Mai 汉化 2.0 Chinese version of PS Vita NINJA GAIDEN Σ PLUS (US, PCSE00021): the gameplay of PS3 / PC Hurricane 1.0.5, released as fully patched games. A separate release from the PS3 and PC builds.",
+  vitaCredit:"Gameplay restoration: <b>哈雅布撒 (bilibili)</b>　Chinese translation: Mai 汉化 2.0 (the title shows jinjia汉化)　Feedback QQ: <span class=\"qq\">2682557218</span>",
+  vitaLegal:"NINJA GAIDEN Σ PLUS ©KOEI TECMO GAMES / Team NINJA. This patch is a non-commercial fan work for owners of the original game; do not sell or repackage it.",
   pcCredit:"Gameplay restoration: <b>哈雅布撒 (bilibili)</b>　Simplified Chinese translation: <b>jinjia &amp; Adrian</b>　Feedback QQ: <span class=\"qq\">2682557218</span>",
   pcLegal:"NINJA GAIDEN Σ ©KOEI TECMO GAMES / Team NINJA. This patch is a non-commercial fan work for owners of the original game; do not sell or repackage it.",
-  dlN:["PS3 download","PC (Steam) patch download"], dlSub:"Baidu Netdisk · full game images (ISO)", pcSub:"Baidu Netdisk · Hurricane patch for the Steam Master Collection Σ (zip)", pcTitle:"PC (Steam Master Collection) Hurricane patch", dlCode:"Baidu Netdisk code", dlCopy:"Copy Baidu Netdisk link + code", dlBaidu:"Baidu Netdisk",
+  dlN:["PS3 download","PC (Steam) patch download","PS Vita download"], dlSub:"Baidu Netdisk · full game images (ISO)", pcSub:"Baidu Netdisk · Hurricane patch for the Steam Master Collection Σ (zip)", pcTitle:"PC (Steam Master Collection) Hurricane patch", dlCode:"Baidu Netdisk code", dlCopy:"Copy Baidu Netdisk link + code", dlBaidu:"Baidu Netdisk",
   featTitle:"Current features (1.0.5)", featSub:"Everything in the latest builds as of 2026-10-11: Chinese 1.0.5 / Hurricane new 1.0.5 / Hurricane origin 1.0.5. ✓ yes, — no.", featCol:"Feature", issuesTitle:"Known issues",
   pdf:"Export PDF", md:"Export Markdown", edTitle:"Three editions", cmpTitle:"Hurricane origin vs. Hurricane new",
   ed:{base:"Chinese",new:"Hurricane new",origin:"Hurricane origin"}, lang:{zh:"Simplified Chinese"},
@@ -381,9 +437,13 @@ const UI = {
   sub:"PS3『NINJA GAIDEN Σ』（北米版 BLUS30036）の簡体字中国語化（日本語原文から翻訳）と機能復元（中文飓风版）。2026-10-07 の正式版 1.01 から 2026-10-11 の 1.0.5 まで、正式版の変更点を新しい順に掲載。版で絞り込めます。",
   subPc:"Steam『NINJA GAIDEN: Master Collection』の NINJA GAIDEN Σ（PC 版）用ハリケーンパッチ：PS3 版 中文飓风版 1.0.5 の機能復元を移植し、jinjia &amp; Adrian 氏の簡体字中国語化の上に導入します。PS3 版とは別の配布で、ダウンロードも導入方法も異なります。",
   platPs3:"PS3 版", platPs3s:"中国語化 + 飓风版 · 完全イメージ", platPc:"PC 版（Steam）", platPcs:"マスターコレクション Σ · ハリケーンパッチ",
+  platVita:"PS Vita 版", platVitas:"Σ PLUS · パッチ適用済みゲーム", vitaTitle:"PS Vita 版（Σ PLUS）ハリケーン", vitaSub:"Baidu Netdisk · パッチ適用済みのゲーム一式（zip）",
+  subVita:"PS Vita『NINJA GAIDEN Σ PLUS』（北米版 PCSE00021）Mai 汉化 2.0 中国語版用のハリケーン：PS3 / PC 飓风版 1.0.5 の機能をパッチ適用済みのゲーム一式として配布。PS3 版・PC 版とは別の配布です。",
+  vitaCredit:"機能復元：<b>哈雅布撒（bilibili）</b>　中国語化：Mai 汉化 2.0（タイトルに jinjia汉化 と表示）　連絡先 QQ：<span class=\"qq\">2682557218</span>",
+  vitaLegal:"『NINJA GAIDEN Σ PLUS』©KOEI TECMO GAMES / Team NINJA。本パッチは非営利のファン作品です。正規のゲームをお持ちの方のみご利用ください。販売・再配布パッケージ化はご遠慮ください。",
   pcCredit:"機能復元：<b>哈雅布撒（bilibili）</b>　簡体字中国語化：<b>jinjia &amp; Adrian</b>　連絡先 QQ：<span class=\"qq\">2682557218</span>",
   pcLegal:"『NINJA GAIDEN Σ』©KOEI TECMO GAMES / Team NINJA。本パッチは非営利のファン作品です。正規のゲームをお持ちの方のみご利用ください。販売・再配布パッケージ化はご遠慮ください。",
-  dlN:["PS3 版ダウンロード","PC 版（Steam）パッチのダウンロード"], dlSub:"Baidu Netdisk · ゲームの完全イメージ（ISO）", pcSub:"Baidu Netdisk · Steam 版マスターコレクション Σ 用ハリケーンパッチ（zip）", pcTitle:"PC 版（Steam マスターコレクション）ハリケーンパッチ", dlCode:"Baidu Netdisk 抽出コード", dlCopy:"Baidu Netdisk のリンクとコードをコピー", dlBaidu:"Baidu Netdisk",
+  dlN:["PS3 版ダウンロード","PC 版（Steam）パッチのダウンロード","PS Vita 版ダウンロード"], dlSub:"Baidu Netdisk · ゲームの完全イメージ（ISO）", pcSub:"Baidu Netdisk · Steam 版マスターコレクション Σ 用ハリケーンパッチ（zip）", pcTitle:"PC 版（Steam マスターコレクション）ハリケーンパッチ", dlCode:"Baidu Netdisk 抽出コード", dlCopy:"Baidu Netdisk のリンクとコードをコピー", dlBaidu:"Baidu Netdisk",
   featTitle:"現在の機能一覧（1.0.5）", featSub:"2026-10-11 時点の最新版 中文版 1.0.5 / 飓风new 1.0.5 / 飓风origin 1.0.5 の全機能。✓ あり、— なし。", featCol:"機能", issuesTitle:"既知の問題",
   pdf:"PDF を出力", md:"Markdown を出力", edTitle:"3 つの版", cmpTitle:"ハリケーン origin と ハリケーン new の違い",
   ed:{base:"中国語版",new:"ハリケーン new",origin:"ハリケーン origin"}, lang:{zh:"簡体字中国語"},
@@ -583,9 +643,9 @@ function load(k){ try { return localStorage.getItem("ngs-cl-"+k); } catch(e){ re
 function save(k,v){ try { localStorage.setItem("ngs-cl-"+k, v); } catch(e){} }
 { const nav=(navigator.language||"zh").toLowerCase(); st.lang = nav.startsWith("ja") ? "ja" : nav.startsWith("zh") ? "zh" : "en"; }
 const sl = load("lang"); if (UI[sl]) st.lang = sl;
-const sp = load("plat"); if (sp === "ps3" || sp === "pc") st.plat = sp;
-/* #zh #en #ja pick the page language, #pc #ps3 the platform tab (combinable: #pc-en) */
-for (const h of location.hash.slice(1).split(/[-,&]/)){ if (UI[h]) st.lang = h; else if (h === "pc" || h === "ps3") st.plat = h; }
+const sp = load("plat"); if (sp === "ps3" || sp === "pc" || sp === "vita") st.plat = sp;
+/* #zh #en #ja pick the page language, #ps3 #pc #vita the platform tab (combinable: #pc-en) */
+for (const h of location.hash.slice(1).split(/[-,&]/)){ if (UI[h]) st.lang = h; else if (h === "pc" || h === "ps3" || h === "vita") st.plat = h; }
 const se = load("ed"); if (["all","base","new","origin"].includes(se)) st.ed = se;
 const sn = load("ln"); if (["all","zh"].includes(sn)) st.ln = sn;
 
@@ -607,7 +667,8 @@ function itemTags(ls, U){
   return out;
 }
 function dlOrder(U){ return [{key:"baidu", plat:"ps3", label:U.dlBaidu, url:DL_URL, code:DL_CODE, sub:U.dlSub, name:U.dlN[0]},
-  {key:"pc", plat:"pc", label:U.dlBaidu, url:PC_URL, code:PC_CODE, sub:U.pcSub, name:U.dlN[1]}]; }
+  {key:"pc", plat:"pc", label:U.dlBaidu, url:PC_URL, code:PC_CODE, sub:U.pcSub, name:U.dlN[1]},
+  {key:"vita", plat:"vita", label:U.dlBaidu, url:VITA_URL, code:VITA_CODE, sub:U.vitaSub, name:U.dlN[2]}]; }
 function tx(o){ return o ? (o[st.lang] || o.zh) : ""; }
 
 function visible(){
@@ -628,7 +689,7 @@ function render(){
   document.querySelectorAll("#langs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === st.lang));
   document.querySelectorAll("#plats button").forEach(b => b.setAttribute("aria-selected", b.dataset.plat === st.plat));
   document.querySelectorAll("[data-plat-only]").forEach(e => e.hidden = e.dataset.platOnly !== st.plat);
-  $("#sub").innerHTML = st.plat === "pc" ? U.subPc : U.sub;
+  $("#sub").innerHTML = st.plat === "pc" ? U.subPc : st.plat === "vita" ? U.subVita : U.sub;
 
   $("#eds").innerHTML = ["base","new","origin"].map(ed => {
     const ks = ORDER.filter(k => LINE[k].ed === ed);
@@ -645,6 +706,8 @@ function render(){
   $("#issues").innerHTML = ISSUES[st.lang].map(i => `<li>${i}</li>`).join("");
   const P = PC[st.lang];
   $("#pc").innerHTML = `<p class="intro">${P.intro}</p><ul>${P.items.map(i => `<li>${i}</li>`).join("")}</ul><p class="sm">${P.install}</p><p class="sm">${P.test}</p>`;
+  const V = VITA[st.lang];
+  $("#vita").innerHTML = `<p class="intro">${V.intro}</p><ul>${V.items.map(i => `<li>${i}</li>`).join("")}</ul><p class="sm">${V.install}</p><p class="sm">${V.test}</p>`;
   const C = CMP[st.lang];
   $("#cmp").innerHTML = `<p class="intro">${C.intro}</p><div class="tbl"><table>
     <thead><tr><th>${U.vs}</th><th class="new">${U.ed.new}</th><th class="origin">${U.ed.origin}</th></tr></thead>
@@ -675,8 +738,10 @@ function render(){
   $("#dlName").textContent = dlRows[0].name;
   $("#pcLink").href = PC_URL;
   $("#pcName").textContent = dlRows[1].name;
+  $("#vitaLink").href = VITA_URL;
+  $("#vitaName").textContent = dlRows[2].name;
   const fd = dlRows.filter(d => d.plat === st.plat).map(d => `<div class="dlfoot"><b>${d.name}</b> · ${d.label}${d.code ? ` · ${U.dlCode} <b>${d.code}</b>` : ""} · <a href="${d.url}" target="_blank" rel="noopener">${d.url}</a></div>`).join("");
-  $("#foot").innerHTML = fd + (st.plat === "pc" ? `<div>${U.pcCredit}</div><div>${U.pcLegal}</div>` : `<div>${U.credit}</div><div>${U.legal}</div><div>${U.base}</div>`);
+  $("#foot").innerHTML = fd + (st.plat === "pc" ? `<div>${U.pcCredit}</div><div>${U.pcLegal}</div>` : st.plat === "vita" ? `<div>${U.vitaCredit}</div><div>${U.vitaLegal}</div>` : `<div>${U.credit}</div><div>${U.legal}</div><div>${U.base}</div>`);
 }
 
 /* ===== markdown export (current language + filter) ===== */
@@ -684,6 +749,13 @@ function strip(s){ return s.replace(/<b>(.*?)<\/b>/g,"**$1**").replace(/<br>/g,"
 function toMarkdown(){
   const U = UI[st.lang], C = CMP[st.lang], L = [];
   const dl = dlOrder(U).filter(d => d.plat === st.plat).map(d => `**${d.name}** · ${d.sub} · <${d.url}>${d.code ? `　${U.dlCode} \`${d.code}\`` : ""}`);
+  if (st.plat === "vita"){
+    const V = VITA[st.lang];
+    L.push(`# ${strip(U.h1)} · ${U.platVita}`, "", `> ${strip(U.subVita)}`, "", ...dl, "",
+      `## ${U.vitaTitle}`, "", strip(V.intro), "", ...V.items.map(i => `- ${strip(i)}`), "", strip(V.install), "", strip(V.test), "",
+      "---", "", strip(U.vitaCredit), "", U.vitaLegal, "");
+    return L.join("\n");
+  }
   if (st.plat === "pc"){
     const P = PC[st.lang];
     L.push(`# ${strip(U.h1)} · ${U.platPc}`, "", `> ${strip(U.subPc)}`, "", ...dl, "",
@@ -770,6 +842,11 @@ document.addEventListener("click", e => {
   else if (b.id === "pcCopy"){
     const U = UI[st.lang], txt = `${PC_URL}  ${U.dlCode}: ${PC_CODE}`, ok = () => $("#pcMsg").textContent = U.copied;
     const fb = () => { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); ok(); } catch(e){ $("#pcMsg").textContent = txt; } t.remove(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fb); else fb();
+  }
+  else if (b.id === "vitaCopy"){
+    const U = UI[st.lang], txt = `${VITA_URL}  ${U.dlCode}: ${VITA_CODE}`, ok = () => $("#vitaMsg").textContent = U.copied;
+    const fb = () => { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); ok(); } catch(e){ $("#vitaMsg").textContent = txt; } t.remove(); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fb); else fb();
   }
   else if (b.id === "mdClose") $("#modal").hidden = true;
