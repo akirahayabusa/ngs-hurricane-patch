@@ -356,7 +356,7 @@ const VITA = {
    "标题画面版权条下面加一行“Hurricane By 哈雅布撒　　飓风origin版1.0.5 / 飓风new版1.0.5”（思源黑体），原来那行不动。",
    "修正 Vita 版独有的问题：游戏给交差成功的无敌计时是 13 帧，Vita 版每次减 2 会跳过 0，导致交差后一直打不中；改为 14 并加了保护。",
    "两个包：飓风包交差（飓风包原版交差招式）、黑之章交差（黑之章短版招式），只差交差招式，二选一。"],
-  install:"安装：解压后把 PCSE00021 整个拷到 Vita 的 ux0:app/（已经装过的先备份再覆盖；没装过的拷进去后在 VitaShell 里刷新 LiveArea）。改动的只有 eboot.bin 和 resources.psarc，其余 662 个文件与汉化版原件相同。",
+  install:"安装（Mai 格式，与 Mai 汉化 2.0 原版装法相同）：解压后把 PCSE00021 文件夹整个拷到 Vita 的 ux0:mai/ 下面，打开 Mai 格式安装器，选择从文件夹安装。VitaShell 的“刷新 LiveArea”装不了 Mai 格式。改动的只有 eboot.bin 和 resources.psarc，其余 662 个文件与汉化版原件相同；还原时用 Mai 汉化 2.0 原版重新安装即可。",
   test:"测试情况：作者在 PS Vita 实机上测试；开发时在 Vita3K 模拟器上实测一代交差版的交差、接 △ 瞬间蓄力、特效、加业、弹分、自动补道具、鬼彻扣血、标题署名、交差后受击正常（Vita3K 不支持这种转储，测试时用的是只为模拟器改过加载方式的副本）。黑之章交差版、双刀交差、任务与生存模式未单独实测。已知限制同其他版本：黑之章交差的白光、彩虹圆环、残影未恢复；交差和绝技同时弹分时只显示绝技。" },
  en:{ intro:"The restored gameplay of PS3 / PC Hurricane 1.0.5, ported to the Mai 汉化 2.0 Chinese version of PS Vita NINJA GAIDEN Σ PLUS (US, PCSE00021; the title shows “jinjia汉化”), translation untouched. Released as fully patched games. First release 2026-10-15: Vita Hurricane 1.0.5.",
   items:["<b>Intercept</b>: perfect block = Intercept, same rule as PC / PS3 Hurricane 1.0.5; follows the in-game Guard button setting; every weapon including the Dual Katana.",
@@ -365,7 +365,7 @@ const VITA = {
    "A second line under the title screen's copyright strip: “Hurricane By 哈雅布撒　　飓风origin版1.0.5 / 飓风new版1.0.5” (Noto Sans SC); the original line is unchanged.",
    "Fixes a Vita-only problem: the game gives a successful Intercept 13 frames of invulnerability, but the Vita build counts down in steps of 2 and skips 0, so Ryu could never be hit again; now 14, with a safeguard.",
    "Two packages: Hurricane Pack Intercept (the Hurricane Pack move) and Black's Intercept (Black's short move); they differ only in the move — pick one."],
-  install:"Install: unpack and copy the whole PCSE00021 folder to ux0:app/ on the Vita (back up first if the game is installed; otherwise refresh the LiveArea in VitaShell). Only eboot.bin and resources.psarc differ; the other 662 files are the translated originals.",
+  install:"Install (Mai format, same as the Mai 汉化 2.0 original): unpack, copy the whole PCSE00021 folder to ux0:mai/ on the Vita, open the Mai-format installer and install from the folder. VitaShell's LiveArea refresh cannot install a Mai-format dump. Only eboot.bin and resources.psarc differ; the other 662 files are the translated originals. To go back, reinstall the Mai 汉化 2.0 original the same way.",
   test:"Testing: tested by the author on a real PS Vita; during development the Hurricane Pack package was tested in the Vita3K emulator — Intercept, △ instant charge, effects, karma, pop-up, items given at start, Kitetsu drain, title credit, being hit normally after an Intercept (Vita3K cannot run this kind of dump, so a copy with an emulator-only loading change was used). Black's package, Dual Katana Intercept, missions and survival were not tested separately. Known limits as elsewhere: Black's white flash, rainbow ring and afterimages are not restored; simultaneous Intercept and Ultimate Technique pop-ups show only the latter." },
  ja:{ intro:"PS3 / PC 飓风版 1.0.5 の機能復元を、PS Vita『NINJA GAIDEN Σ PLUS』（北米版 PCSE00021）の Mai 汉化 2.0 中国語版（タイトルに「jinjia汉化」と表示）に移植しました。翻訳内容には手を加えません。パッチ適用済みのゲーム一式として配布。初版 2026-10-15：Vita 飓风版 1.0.5。",
   items:["<b>交差の法</b>：ジャスト防御で交差。判定は PC / PS3 飓风版 1.0.5 と同じ。ゲーム内の「防御」のボタン設定に追従。双刀を含む全武器で交差。",
@@ -374,7 +374,7 @@ const VITA = {
    "タイトル画面のコピーライト表示の下に「Hurricane By 哈雅布撒　　飓风origin版1.0.5 / 飓风new版1.0.5」を一行追加（Noto Sans SC）。元の行はそのまま。",
    "Vita 版だけの問題を修正：交差成功時の無敵時間が 13 フレームで、Vita 版は 2 ずつ減らすため 0 を飛ばし、交差後にリュウへ攻撃が当たらなくなっていました。14 に変更し、保護も追加。",
    "パッケージは二つ：ハリケーンパックの交差（元の技）と『Black』の交差（短い技）。違いは技だけ、どちらか一つを選んでください。"],
-  install:"導入：解凍した PCSE00021 フォルダを丸ごと Vita の ux0:app/ にコピー（導入済みならバックアップしてから上書き、未導入なら VitaShell で LiveArea を更新）。変更は eboot.bin と resources.psarc だけで、他の 662 ファイルは中国語化版のままです。",
+  install:"導入（Mai 形式。Mai 汉化 2.0 版と同じ方法）：解凍した PCSE00021 フォルダを丸ごと Vita の ux0:mai/ にコピーし、Mai 形式のインストーラーでフォルダからインストール。VitaShell の LiveArea 更新では Mai 形式は導入できません。変更は eboot.bin と resources.psarc だけで、他の 662 ファイルは中国語化版のままです。元に戻すときは Mai 汉化 2.0 版を同じ方法で入れ直してください。",
   test:"テスト状況：作者が PS Vita 実機で確認。開発中は Vita3K エミュレータでハリケーンパック版の交差・△ の瞬間溜め・エフェクト・カルマ・表示・アイテムの自動所持・鬼徹の体力減少・タイトルのクレジット・交差後に通常どおり被弾することを確認（Vita3K はこの種のダンプを動かせないため、エミュレータ用に読み込み方だけを変えたコピーを使用）。『Black』版、双刀の交差、ミッション・サバイバルは個別には未確認。既知の制限は他版と同じ：『Black』の白い閃光・虹色の輪・残像は未復元、交差と絶技の表示が同時のときは絶技のみ。" }
 };
 
